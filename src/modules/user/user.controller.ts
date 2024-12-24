@@ -18,6 +18,22 @@ const createUser = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
+const createAdmin = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const payload = req.body;
+    const result = await userService.createAdmin(payload);
+    sendResponse(res, {
+      statusCode: StatusCodes.OK,
+      success: true,
+      message: 'Admin created successfully',
+      data: result,
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
 export const userController = {
   createUser,
+  createAdmin,
 };

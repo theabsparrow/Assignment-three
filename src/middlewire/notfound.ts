@@ -4,7 +4,7 @@ import { StatusCodes } from 'http-status-codes';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const notFound = (req: Request, res: Response, next: NextFunction) => {
-  return res.status(StatusCodes.NOT_FOUND).json({
+  res.status(StatusCodes.NOT_FOUND).json({
     success: false,
     message: 'API not found',
     error: '',
