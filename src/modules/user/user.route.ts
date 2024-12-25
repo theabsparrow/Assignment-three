@@ -2,6 +2,8 @@ import { Router } from 'express';
 import { userController } from './user.controller';
 import { userValidation } from './user.validation';
 import validateRequest from '../../middlewire/validateRequest';
+import auth from '../../middlewire/auth';
+import { USER_ROLE } from './user.constant';
 
 const router = Router();
 
@@ -17,12 +19,18 @@ router.post(
 );
 router.patch(
   '/update-user/:id',
+  auth(USER_ROLE.admin, USER_ROLE.user),
   validateRequest(userValidation.updateUserValidationSchema),
   userController.updateUserInfo,
 );
 
-router.get('/getAllUsers', userController.getAllUsers);
-router.get('/getUser/:id', userController.getSingleUSer);
-router.patch('/users/:userId/block', userController.blockUser);
+router.get('/getAllUsers', auth(USER_ROLE.admin), userController.getAllUsers);
+router.get('/getUser/:id', auth(USER_ROLE.admin), userController.getSingleUSer);
+
+router.patch(
+  '/users/:userId/block',
+  auth(USER_ROLE.admin),
+  userController.blockUser,
+);
 
 export const userRouter = router;

@@ -1,3 +1,5 @@
+import { USER_ROLE } from './user.constant';
+
 export type TRole = 'admin' | 'user';
 
 export type TUser = {
@@ -18,3 +20,5 @@ export type TUpdateUserInfo = {
   name?: string;
   email?: string;
 };
+
+export type TUserRole = keyof typeof USER_ROLE;

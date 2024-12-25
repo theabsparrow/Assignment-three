@@ -8,7 +8,8 @@ import { blogService } from './blogs.service';
 
 const createBlog = catchAsync(async (req, res, next) => {
   const payload = req.body;
-  const result = await blogService.createBlog(payload);
+  const { userEmail } = req.user;
+  const result = await blogService.createBlog(payload, userEmail);
   sendResponse(res, {
     statusCode: StatusCodes.OK,
     success: true,
