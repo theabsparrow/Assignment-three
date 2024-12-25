@@ -1,8 +1,10 @@
 import mongoose from 'mongoose';
-import { TErrorSource } from '../interface/error';
+import { TErrorSource, TValidationError } from '../interface/error';
 import { StatusCodes } from 'http-status-codes';
 
-const handleValidationError = (err: mongoose.Error.ValidationError) => {
+const handleValidationError = (
+  err: mongoose.Error.ValidationError,
+): TValidationError => {
   const errorSource: TErrorSource = Object.values(err.errors).map(
     (val: mongoose.Error.ValidatorError | mongoose.Error.CastError) => {
       return {

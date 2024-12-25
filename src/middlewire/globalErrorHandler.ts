@@ -5,14 +5,17 @@ import { TErrorSource } from '../interface/error';
 import config from '../config';
 import handleZodError from '../error/handleZodError';
 import handleValidationError from '../error/handleValidationError';
+import handleCastError from '../error/handleCastError';
+import handleDuplicateError from '../error/handleDuplicateError';
+import AppError from '../error/AppError';
 
 /* eslint-disable no-undef */
 /* eslint-disable no-unused-vars */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
 const globalErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
-  let statusCode = err.statusCode || 500;
-  let message = err?.message || 'something went wrong';
+  let statusCode = 500;
+  let message = 'something went wrong';
 
   let errorSource: TErrorSource = [
     {
@@ -31,7 +34,35 @@ const globalErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
     statusCode = convertedError?.statusCode;
     message = convertedError?.message;
     errorSource = convertedError?.errorSource;
+  } else if (err.name === 'CastError') {
+    const convertedError = handleCastError(err);
+    statusCode = convertedError?.statusCode;
+    message = convertedError?.message;
+    errorSource = convertedError?.errorSource;
+  } else if (err.code === 11000) {
+    const convertedError = handleDuplicateError(err);
+    statusCode = convertedError?.statusCode;
+    message = convertedError?.message;
+    errorSource = convertedError?.errorSource;
+  } else if (err instanceof AppError) {
+    statusCode = err?.statusCode;
+    message = err?.message;
+    errorSource = [
+      {
+        path: '',
+        message: err?.message,
+      },
+    ];
+  } else if (err instanceof Error) {
+    message = err?.message;
+    errorSource = [
+      {
+        path: '',
+        message: err?.message,
+      },
+    ];
   }
+
   res.status(statusCode).json({
     success: false,
     message,

@@ -1,8 +1,8 @@
 import { ZodError, ZodIssue } from 'zod';
-import { TErrorSource } from '../interface/error';
+import { TErrorSource, TValidationError } from '../interface/error';
 import { StatusCodes } from 'http-status-codes';
 
-const handleZodError = (err: ZodError) => {
+const handleZodError = (err: ZodError): TValidationError => {
   const errorSource: TErrorSource = err.issues.map((issue: ZodIssue) => {
     return {
       path: issue?.path[issue.path.length - 1],
