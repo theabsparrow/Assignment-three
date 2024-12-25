@@ -1,5 +1,7 @@
+import AppError from '../../error/AppError';
 import { TUserBody } from './user.interface';
 import { User } from './user.model';
+import { StatusCodes } from 'http-status-codes';
 
 const createUser = async (payload: TUserBody) => {
   const userPayload = { ...payload, role: 'user' };
@@ -14,7 +16,38 @@ const createAdmin = async (payload: TUserBody) => {
   return result;
 };
 
+const getAllUsers = async () => {
+  const result = await User.find();
+  return result;
+};
+
+const getSingleUser = async (id: string) => {
+  const result = await User.findById(id);
+  return result;
+};
+
+const blockUser = async (id: string) => {
+  const isUSerExist = await User.findById(id);
+
+  if (!isUSerExist) {
+    throw new AppError(StatusCodes.NOT_FOUND, 'this user does not exist');
+  }
+  if (isUSerExist.isBlocked === true) {
+    throw new AppError(StatusCodes.CONFLICT, 'this user is already blocked');
+  }
+
+  const result = await User.findByIdAndUpdate(
+    id,
+    { isBlocked: true },
+    { new: true },
+  );
+  return result;
+};
+
 export const userService = {
   createUser,
   createAdmin,
+  getAllUsers,
+  getSingleUser,
+  blockUser,
 };

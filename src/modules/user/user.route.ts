@@ -7,7 +7,7 @@ const router = Router();
 
 router.post(
   '/register',
-  validateRequest(userValidation.userValidationSchema),
+  //   validateRequest(userValidation.userValidationSchema),
   userController.createUser,
 );
 router.post(
@@ -15,5 +15,9 @@ router.post(
   validateRequest(userValidation.userValidationSchema),
   userController.createAdmin,
 );
+
+router.get('/getAllUsers', userController.getAllUsers);
+router.get('/getUser/:id', userController.getSingleUSer);
+router.patch('/users/:userId/block', userController.blockUser);
 
 export const userRouter = router;
