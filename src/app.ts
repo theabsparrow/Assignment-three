@@ -11,7 +11,7 @@ app.use(cors());
 
 app.use('/api', router);
 
-const runningServer = (req: Request, res: Response) => {
+const runningServer = async (req: Request, res: Response) => {
   const serverdata = `server is running on port ${config.port}`;
   res.send(serverdata);
 };
