@@ -13,3 +13,8 @@ export type TUserBody = {
   email: string;
   password: string;
 };
+
+export type TUpdateUserInfo = {
+  name?: string;
+  email?: string;
+};

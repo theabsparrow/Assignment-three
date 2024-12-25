@@ -48,6 +48,18 @@ const getSingleUSer = catchAsync(async (req, res, next) => {
   });
 });
 
+const updateUserInfo = catchAsync(async (req, res, next) => {
+  const id = req.params.id;
+  const payload = req.body;
+  const result = await userService.updateUserInfo(id, payload);
+  sendResponse(res, {
+    statusCode: StatusCodes.OK,
+    success: true,
+    message: 'user info updated successfully',
+    data: result,
+  });
+});
+
 const blockUser = catchAsync(async (req, res, next) => {
   const id = req.params.userId;
   const result = await userService.blockUser(id);
@@ -65,4 +77,5 @@ export const userController = {
   getAllUsers,
   getSingleUSer,
   blockUser,
+  updateUserInfo,
 };

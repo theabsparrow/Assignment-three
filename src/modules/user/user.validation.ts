@@ -16,6 +16,18 @@ const userValidationSchema = z.object({
     .min(6, { message: 'password can`t be less than 6 character' }),
 });
 
+const updateUserValidationSchema = z.object({
+  name: z
+    .string({
+      invalid_type_error: 'name must be string',
+    })
+    .min(2, { message: 'name can`t be less than 2 character' })
+    .max(30, { message: 'name can`t be more than 30 character' })
+    .optional(),
+  email: z.string().email().optional(),
+});
+
 export const userValidation = {
   userValidationSchema,
+  updateUserValidationSchema,
 };

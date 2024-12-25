@@ -1,5 +1,5 @@
 import AppError from '../../error/AppError';
-import { TUserBody } from './user.interface';
+import { TUpdateUserInfo, TUserBody } from './user.interface';
 import { User } from './user.model';
 import { StatusCodes } from 'http-status-codes';
 
@@ -23,6 +23,16 @@ const getAllUsers = async () => {
 
 const getSingleUser = async (id: string) => {
   const result = await User.findById(id);
+  return result;
+};
+
+const updateUserInfo = async (id: string, payload: TUpdateUserInfo) => {
+  const isUSerExist = await User.findById(id);
+  if (!isUSerExist) {
+    throw new AppError(StatusCodes.NOT_FOUND, 'this user does not exist');
+  }
+
+  const result = await User.findByIdAndUpdate(id, payload, { new: true });
   return result;
 };
 
@@ -50,4 +60,5 @@ export const userService = {
   getAllUsers,
   getSingleUser,
   blockUser,
+  updateUserInfo,
 };

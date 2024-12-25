@@ -8,4 +8,5 @@ export default {
   database_url: process.env.DATABASE_URL,
   bcrypt_salt_round: process.env.BYCRIPT_SALT_ROUNDS,
   NODE_ENV: process.env.NODE_ENV,
+  jwt_access_secret: process.env.JWT_ACCESS_SECRET,
 };

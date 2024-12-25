@@ -15,6 +15,11 @@ router.post(
   validateRequest(userValidation.userValidationSchema),
   userController.createAdmin,
 );
+router.patch(
+  '/update-user/:id',
+  validateRequest(userValidation.updateUserValidationSchema),
+  userController.updateUserInfo,
+);
 
 router.get('/getAllUsers', userController.getAllUsers);
 router.get('/getUser/:id', userController.getSingleUSer);
