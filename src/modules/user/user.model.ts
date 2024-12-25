@@ -8,17 +8,17 @@ const userSchema = new Schema<TUser>(
     name: {
       type: String,
       trim: true,
-      required: true,
+      required: [true, 'name is required'],
     },
     email: {
       type: String,
       unique: true,
       trim: true,
-      required: true,
+      required: [true, 'email is required'],
     },
     password: {
       type: String,
-      required: true,
+      required: [true, 'password is required'],
     },
     role: {
       type: String,
