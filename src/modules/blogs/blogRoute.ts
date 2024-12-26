@@ -35,5 +35,11 @@ router.delete(
 
 // the router where user can see all the blogs
 router.get('/', blogsController.getAllBlogs);
+// the router where the login user can see a single blog
+router.get(
+  '/:id',
+  auth(USER_ROLE.admin, USER_ROLE.user),
+  blogsController.getASingleBlog,
+);
 
 export const blogRouter = router;

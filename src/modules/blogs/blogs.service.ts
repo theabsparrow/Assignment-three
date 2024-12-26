@@ -13,7 +13,6 @@ const createBlog = async (payload: TBlogBody, email: string) => {
       'the user with this email dosen`t exist',
     );
   }
-
   const blogInfo = { ...payload, author: isUserExist._id };
   const result = await Blogs.create(blogInfo);
   return result;
@@ -22,7 +21,6 @@ const createBlog = async (payload: TBlogBody, email: string) => {
 // get all blogs service
 const getAllBlogs = async (query: Record<string, unknown>) => {
   const queryObject = { ...query };
-
   // blog searching
   const blogSearchbaleFields = ['title', 'content'];
   const search = query?.search || '';
@@ -31,20 +29,26 @@ const getAllBlogs = async (query: Record<string, unknown>) => {
       [field]: { $regex: search, $options: 'i' },
     })),
   });
-
   // blog filtering
   const excludeFields = ['search', 'sortBy', 'sortOrder'];
   excludeFields.forEach((ele) => delete queryObject[ele]);
   const filterQuery = searchQuery.find(queryObject).populate('author');
-
   // blog sorting
   let sortString = '-createdAt';
   if (query?.sortBy) {
     const sortOrder = query?.sortOrder === 'desc' ? '-' : '';
     sortString = `${sortOrder}${query.sortBy}`;
   }
-
   const result = await filterQuery.sort(sortString);
+  return result;
+};
+
+// get a single blog by login
+const getSingleBlog = async (id: string) => {
+  const result = await Blogs.findById(id).populate('author');
+  if (!result) {
+    throw new AppError(StatusCodes.NOT_FOUND, 'this blog dosn`t exist');
+  }
   return result;
 };
 
@@ -60,7 +64,6 @@ const updateABlog = async (
   }
 
   const userID = isBlogExist?.author;
-
   const isUserExist = await User.findById(userID);
   if (!isUserExist) {
     throw new AppError(
@@ -111,4 +114,5 @@ export const blogService = {
   deleteACertainBlog,
   deleteBlogByAdmin,
   getAllBlogs,
+  getSingleBlog,
 };
