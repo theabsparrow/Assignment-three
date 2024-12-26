@@ -21,34 +21,31 @@ const createBlog = async (payload: TBlogBody, email: string) => {
 
 // get all blogs service
 const getAllBlogs = async (query: Record<string, unknown>) => {
-  // console.log(query);
   const queryObject = { ...query };
+
+  // blog searching
   const blogSearchbaleFields = ['title', 'content'];
-  let search = '';
-
-  if (query?.search) {
-    search = query?.search as string;
-  }
-
+  const search = query?.search || '';
   const searchQuery = Blogs.find({
     $or: blogSearchbaleFields.map((field) => ({
       [field]: { $regex: search, $options: 'i' },
     })),
   });
 
-  const excludeFields = ['search', 'sort'];
+  // blog filtering
+  const excludeFields = ['search', 'sortBy', 'sortOrder'];
   excludeFields.forEach((ele) => delete queryObject[ele]);
-
   const filterQuery = searchQuery.find(queryObject).populate('author');
 
-  let sort = '-createdAt';
-  if (query?.sort) {
-    sort = query?.sort as string;
+  // blog sorting
+  let sortString = '-createdAt';
+  if (query?.sortBy) {
+    const sortOrder = query?.sortOrder === 'desc' ? '-' : '';
+    sortString = `${sortOrder}${query.sortBy}`;
   }
 
-  const sortQuery = await filterQuery.sort(sort);
-
-  return sortQuery;
+  const result = await filterQuery.sort(sortString);
+  return result;
 };
 
 // only the user with the role 'user' can update the blog title and content
