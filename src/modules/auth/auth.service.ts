@@ -8,6 +8,7 @@ import config from '../../config';
 
 const loginUser = async (payload: TLoginUser) => {
   const { email, password } = payload;
+
   const isUserExist = await User.findOne({ email });
   if (!isUserExist) {
     throw new AppError(StatusCodes.NOT_FOUND, 'this user does not exist');
@@ -20,6 +21,7 @@ const loginUser = async (payload: TLoginUser) => {
   if (!isPasswordMatched) {
     throw new AppError(StatusCodes.FORBIDDEN, 'password doesn`t match');
   }
+
   const isBlocked = isUserExist?.isBlocked;
   if (isBlocked) {
     throw new AppError(StatusCodes.FORBIDDEN, 'this user is already blocked');
@@ -29,13 +31,14 @@ const loginUser = async (payload: TLoginUser) => {
     userEmail: isUserExist.email,
     role: isUserExist.role,
   };
-
-  const token = jwt.sign(jwtPayload, config.jwt_access_secret as string, {
+  const accessToken = jwt.sign(jwtPayload, config.jwt_access_secret as string, {
     expiresIn: '10d',
   });
 
+  const token = `Bearer ${accessToken}`;
   return { token };
 };
+
 export const authService = {
   loginUser,
 };

@@ -5,6 +5,7 @@ import sendResponse from '../../utills/sendResponse';
 import { StatusCodes } from 'http-status-codes';
 import catchAsync from '../../utills/catchAsync';
 
+// here user is created with the role 'user'
 const createUser = catchAsync(async (req, res, next) => {
   const payload = req.body;
   const result = await userService.createUser(payload);
@@ -16,6 +17,7 @@ const createUser = catchAsync(async (req, res, next) => {
   });
 });
 
+// here user is created with the role 'admin'
 const createAdmin = catchAsync(async (req, res, next) => {
   const payload = req.body;
   const result = await userService.createAdmin(payload);
@@ -27,6 +29,7 @@ const createAdmin = catchAsync(async (req, res, next) => {
   });
 });
 
+// only admin can find all the user from the database
 const getAllUsers = catchAsync(async (req, res, next) => {
   const result = await userService.getAllUsers();
   sendResponse(res, {
@@ -37,6 +40,7 @@ const getAllUsers = catchAsync(async (req, res, next) => {
   });
 });
 
+// only admin can find a certain user from the database
 const getSingleUSer = catchAsync(async (req, res, next) => {
   const id = req.params.id;
   const result = await userService.getSingleUser(id);
@@ -48,6 +52,7 @@ const getSingleUSer = catchAsync(async (req, res, next) => {
   });
 });
 
+// user and admin both can update their name and email
 const updateUserInfo = catchAsync(async (req, res, next) => {
   const id = req.params.id;
   const payload = req.body;
@@ -60,13 +65,14 @@ const updateUserInfo = catchAsync(async (req, res, next) => {
   });
 });
 
+// only admin can block a user
 const blockUser = catchAsync(async (req, res, next) => {
   const id = req.params.userId;
   const result = await userService.blockUser(id);
   sendResponse(res, {
     statusCode: StatusCodes.OK,
     success: true,
-    message: 'user is blocked successfully',
+    message: 'user blocked successfully',
     data: result,
   });
 });

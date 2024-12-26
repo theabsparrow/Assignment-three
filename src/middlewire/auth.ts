@@ -8,7 +8,7 @@ import { TUserRole } from '../modules/user/user.interface';
 
 const auth = (...userRole: TUserRole[]) => {
   return catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-    const token = req.headers.authorization;
+    const token = req.headers.authorization?.split(' ')[1];
     if (!token) {
       throw new AppError(StatusCodes.UNAUTHORIZED, 'you are not authorized');
     }

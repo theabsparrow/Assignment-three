@@ -1,5 +1,6 @@
 import { z } from 'zod';
 
+// user validation
 const userValidationSchema = z.object({
   name: z
     .string({
@@ -16,6 +17,7 @@ const userValidationSchema = z.object({
     .min(6, { message: 'password can`t be less than 6 character' }),
 });
 
+// user validation for update the info
 const updateUserValidationSchema = z.object({
   name: z
     .string({

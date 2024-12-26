@@ -7,6 +7,7 @@ import { USER_ROLE } from '../user/user.constant';
 
 const router = Router();
 
+// the route where the user with the role 'user' create blogs
 router.post(
   '/',
   auth(USER_ROLE.user),
@@ -14,4 +15,11 @@ router.post(
   blogsController.createBlog,
 );
 
+// the route where user with the role 'user' update the title and content od a blog
+router.patch(
+  '/:id',
+  auth(USER_ROLE.user),
+  validateRequest(blogValidation.updateBlogValidationSchema),
+  blogsController.updateBlog,
+);
 export const blogRouter = router;

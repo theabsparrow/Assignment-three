@@ -1,5 +1,5 @@
 import { Types } from 'mongoose';
-
+// interface of a blog
 export type TBlog = {
   title: string;
   content: string;
@@ -7,6 +7,7 @@ export type TBlog = {
   isPublished: boolean;
 };
 
+// interface of a blog data that comes from the client
 export type TBlogBody = {
   title: string;
   content: string;

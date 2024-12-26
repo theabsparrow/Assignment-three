@@ -34,6 +34,7 @@ const userSchema = new Schema<TUser>(
   },
 );
 
+// the interceptor where the password hashed before saved in the database
 userSchema.pre('save', async function (next) {
   const user = this;
   user.password = await bcrypt.hash(
@@ -43,6 +44,7 @@ userSchema.pre('save', async function (next) {
   next();
 });
 
+// the interceptor where make the password empty before visible to the client
 userSchema.post('save', function (doc, next) {
   doc.password = '';
   next();
