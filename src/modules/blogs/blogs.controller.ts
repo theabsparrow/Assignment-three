@@ -45,8 +45,21 @@ const deleteACertainBlog = catchAsync(async (req, res, next) => {
     data: result,
   });
 });
+
+// admin can delete any blog
+const deleteBlogByAdmin = catchAsync(async (req, res, next) => {
+  const id = req.params.id;
+  const result = await blogService.deleteBlogByAdmin(id);
+  sendResponse(res, {
+    statusCode: StatusCodes.OK,
+    success: true,
+    message: 'Blog deleted successfully',
+    data: result,
+  });
+});
 export const blogsController = {
   createBlog,
   updateBlog,
   deleteACertainBlog,
+  deleteBlogByAdmin,
 };

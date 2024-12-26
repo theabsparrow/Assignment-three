@@ -25,4 +25,12 @@ router.patch(
 
 // the route where user can delete his own blog
 router.delete('/:id', auth(USER_ROLE.user), blogsController.deleteACertainBlog);
+
+// the router where admin can delete any blog
+router.delete(
+  '/blogs/:id',
+  auth(USER_ROLE.admin),
+  blogsController.deleteBlogByAdmin,
+);
+
 export const blogRouter = router;

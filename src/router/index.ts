@@ -19,6 +19,10 @@ const moduleRoutes = [
     route: blogRouter,
   },
   {
+    path: '/admin',
+    route: blogRouter,
+  },
+  {
     path: '/auth',
     route: authRoute,
   },

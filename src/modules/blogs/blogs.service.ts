@@ -67,8 +67,18 @@ const deleteACertainBlog = async (id: string, email: string) => {
   return {};
 };
 
+// admin can delete any blog
+const deleteBlogByAdmin = async (id: string) => {
+  const isBlogExist = await Blogs.findById(id);
+  if (!isBlogExist) {
+    throw new AppError(StatusCodes.NOT_FOUND, 'this blog does not exists');
+  }
+  await Blogs.findByIdAndDelete(id);
+  return {};
+};
 export const blogService = {
   createBlog,
   updateABlog,
   deleteACertainBlog,
+  deleteBlogByAdmin,
 };
