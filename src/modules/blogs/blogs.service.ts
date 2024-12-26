@@ -3,6 +3,8 @@ import AppError from '../../error/AppError';
 import { User } from '../user/user.model';
 import { TBlogBody } from './blogs.interface';
 import { Blogs } from './blogs.model';
+import QueryBuilder from '../../builder/QueryBuilder';
+import { blogSearchableFields } from './blog.const';
 
 // only the user with the role 'user' can create blog
 const createBlog = async (payload: TBlogBody, email: string) => {
@@ -20,26 +22,11 @@ const createBlog = async (payload: TBlogBody, email: string) => {
 
 // get all blogs service
 const getAllBlogs = async (query: Record<string, unknown>) => {
-  const queryObject = { ...query };
-  // blog searching
-  const blogSearchbaleFields = ['title', 'content'];
-  const search = query?.search || '';
-  const searchQuery = Blogs.find({
-    $or: blogSearchbaleFields.map((field) => ({
-      [field]: { $regex: search, $options: 'i' },
-    })),
-  });
-  // blog filtering
-  const excludeFields = ['search', 'sortBy', 'sortOrder'];
-  excludeFields.forEach((ele) => delete queryObject[ele]);
-  const filterQuery = searchQuery.find(queryObject).populate('author');
-  // blog sorting
-  let sortString = '-createdAt';
-  if (query?.sortBy) {
-    const sortOrder = query?.sortOrder === 'desc' ? '-' : '';
-    sortString = `${sortOrder}${query.sortBy}`;
-  }
-  const result = await filterQuery.sort(sortString);
+  const blogQuery = new QueryBuilder(Blogs.find().populate('author'), query)
+    .search(blogSearchableFields)
+    .filter()
+    .sort();
+  const result = await blogQuery.modelQuery;
   return result;
 };
 
