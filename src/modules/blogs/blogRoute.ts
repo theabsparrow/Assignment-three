@@ -33,4 +33,7 @@ router.delete(
   blogsController.deleteBlogByAdmin,
 );
 
+// the router where user can see all the blogs
+router.get('/', blogsController.getAllBlogs);
+
 export const blogRouter = router;

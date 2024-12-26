@@ -19,6 +19,38 @@ const createBlog = async (payload: TBlogBody, email: string) => {
   return result;
 };
 
+// get all blogs service
+const getAllBlogs = async (query: Record<string, unknown>) => {
+  // console.log(query);
+  const queryObject = { ...query };
+  const blogSearchbaleFields = ['title', 'content'];
+  let search = '';
+
+  if (query?.search) {
+    search = query?.search as string;
+  }
+
+  const searchQuery = Blogs.find({
+    $or: blogSearchbaleFields.map((field) => ({
+      [field]: { $regex: search, $options: 'i' },
+    })),
+  });
+
+  const excludeFields = ['search', 'sort'];
+  excludeFields.forEach((ele) => delete queryObject[ele]);
+
+  const filterQuery = searchQuery.find(queryObject).populate('author');
+
+  let sort = '-createdAt';
+  if (query?.sort) {
+    sort = query?.sort as string;
+  }
+
+  const sortQuery = await filterQuery.sort(sort);
+
+  return sortQuery;
+};
+
 // only the user with the role 'user' can update the blog title and content
 const updateABlog = async (
   payload: Partial<TBlogBody>,
@@ -81,4 +113,5 @@ export const blogService = {
   updateABlog,
   deleteACertainBlog,
   deleteBlogByAdmin,
+  getAllBlogs,
 };

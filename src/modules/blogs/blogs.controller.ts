@@ -19,6 +19,18 @@ const createBlog = catchAsync(async (req, res, next) => {
   });
 });
 
+// get all blogs
+const getAllBlogs = catchAsync(async (req, res, next) => {
+  const data = req.query;
+  const result = await blogService.getAllBlogs(data);
+  sendResponse(res, {
+    statusCode: StatusCodes.OK,
+    success: true,
+    message: 'Blogs fetched successfully',
+    data: result,
+  });
+});
+
 // only the user with the role 'user' can update the title and content of a blog
 const updateBlog = catchAsync(async (req, res, next) => {
   const id = req.params.id;
@@ -62,4 +74,5 @@ export const blogsController = {
   updateBlog,
   deleteACertainBlog,
   deleteBlogByAdmin,
+  getAllBlogs,
 };
