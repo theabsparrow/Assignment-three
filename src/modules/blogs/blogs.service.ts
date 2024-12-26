@@ -51,9 +51,24 @@ const updateABlog = async (
   return result;
 };
 
-// both the admin and the user can delete a blog
+// user can delete his own blog
+const deleteACertainBlog = async (id: string, email: string) => {
+  const isBlogExist = await Blogs.findById(id);
+  if (!isBlogExist) {
+    throw new AppError(StatusCodes.NOT_FOUND, 'this blog does not exists');
+  }
+  const userID = isBlogExist.author;
+  const isUserExists = await User.findById(userID);
+  const userEmail = isUserExists?.email;
+  if (userEmail !== email) {
+    throw new AppError(StatusCodes.FORBIDDEN, 'you can`t delete this blog');
+  }
+  await Blogs.findByIdAndDelete(id);
+  return {};
+};
 
 export const blogService = {
   createBlog,
   updateABlog,
+  deleteACertainBlog,
 };

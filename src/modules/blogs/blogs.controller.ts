@@ -33,7 +33,20 @@ const updateBlog = catchAsync(async (req, res, next) => {
   });
 });
 
+// user can delete his own blog
+const deleteACertainBlog = catchAsync(async (req, res, next) => {
+  const id = req.params.id;
+  const { userEmail } = req.user;
+  const result = await blogService.deleteACertainBlog(id, userEmail);
+  sendResponse(res, {
+    statusCode: StatusCodes.OK,
+    success: true,
+    message: 'Blog deleted successfully',
+    data: result,
+  });
+});
 export const blogsController = {
   createBlog,
   updateBlog,
+  deleteACertainBlog,
 };

@@ -22,4 +22,7 @@ router.patch(
   validateRequest(blogValidation.updateBlogValidationSchema),
   blogsController.updateBlog,
 );
+
+// the route where user can delete his own blog
+router.delete('/:id', auth(USER_ROLE.user), blogsController.deleteACertainBlog);
 export const blogRouter = router;
