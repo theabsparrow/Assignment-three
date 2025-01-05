@@ -5,7 +5,7 @@ import { StatusCodes } from 'http-status-codes';
 const handleDuplicateError = (err: any): TValidationError => {
   const match = err.message.match(/"([^*]*)"/);
   const extractedMessage = match && match[1];
-  const errorSource: TErrorSource = [
+  const error: TErrorSource = [
     {
       path: '',
       message: `${extractedMessage} is already exists`,
@@ -17,7 +17,7 @@ const handleDuplicateError = (err: any): TValidationError => {
   return {
     statusCode,
     message: 'duplicate key error',
-    errorSource,
+    error: error,
   };
 };
 

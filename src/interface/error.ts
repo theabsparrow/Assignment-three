@@ -6,5 +6,5 @@ export type TErrorSource = {
 export type TValidationError = {
   message: string;
   statusCode: number;
-  errorSource: TErrorSource;
+  error: TErrorSource;
 };

@@ -3,7 +3,7 @@ import { TErrorSource, TValidationError } from '../interface/error';
 import { StatusCodes } from 'http-status-codes';
 
 const handleZodError = (err: ZodError): TValidationError => {
-  const errorSource: TErrorSource = err.issues.map((issue: ZodIssue) => {
+  const error: TErrorSource = err.issues.map((issue: ZodIssue) => {
     return {
       path: issue?.path[issue.path.length - 1],
       message: issue.message,
@@ -14,7 +14,7 @@ const handleZodError = (err: ZodError): TValidationError => {
   return {
     statusCode,
     message: 'Validation error',
-    errorSource,
+    error,
   };
 };
 

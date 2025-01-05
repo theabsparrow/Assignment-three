@@ -51,12 +51,8 @@ const blockUser = async (id: string) => {
     throw new AppError(StatusCodes.CONFLICT, 'this user is already blocked');
   }
 
-  const result = await User.findByIdAndUpdate(
-    id,
-    { isBlocked: true },
-    { new: true },
-  );
-  return result;
+  await User.findByIdAndUpdate(id, { isBlocked: true }, { new: true });
+  return {};
 };
 
 export const userService = {

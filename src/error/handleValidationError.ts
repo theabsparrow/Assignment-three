@@ -5,7 +5,7 @@ import { StatusCodes } from 'http-status-codes';
 const handleValidationError = (
   err: mongoose.Error.ValidationError,
 ): TValidationError => {
-  const errorSource: TErrorSource = Object.values(err.errors).map(
+  const error: TErrorSource = Object.values(err.errors).map(
     (val: mongoose.Error.ValidatorError | mongoose.Error.CastError) => {
       return {
         path: val?.path,
@@ -18,7 +18,7 @@ const handleValidationError = (
   return {
     statusCode,
     message: 'Validation error',
-    errorSource,
+    error,
   };
 };
 export default handleValidationError;

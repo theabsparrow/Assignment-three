@@ -17,7 +17,7 @@ const globalErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
   let statusCode = 500;
   let message = 'something went wrong';
 
-  let errorSource: TErrorSource = [
+  let error: TErrorSource = [
     {
       path: '',
       message: 'something went wrong',
@@ -28,26 +28,26 @@ const globalErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
     const convertedError = handleZodError(err);
     statusCode = convertedError?.statusCode;
     message = convertedError?.message;
-    errorSource = convertedError?.errorSource;
+    error = convertedError?.error;
   } else if (err.name === 'ValidationError') {
     const convertedError = handleValidationError(err);
     statusCode = convertedError?.statusCode;
     message = convertedError?.message;
-    errorSource = convertedError?.errorSource;
+    error = convertedError?.error;
   } else if (err.name === 'CastError') {
     const convertedError = handleCastError(err);
     statusCode = convertedError?.statusCode;
     message = convertedError?.message;
-    errorSource = convertedError?.errorSource;
+    error = convertedError?.error;
   } else if (err.code === 11000) {
     const convertedError = handleDuplicateError(err);
     statusCode = convertedError?.statusCode;
     message = convertedError?.message;
-    errorSource = convertedError?.errorSource;
+    error = convertedError?.error;
   } else if (err instanceof AppError) {
     statusCode = err?.statusCode;
     message = err?.message;
-    errorSource = [
+    error = [
       {
         path: '',
         message: err?.message,
@@ -55,7 +55,7 @@ const globalErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
     ];
   } else if (err instanceof Error) {
     message = err?.message;
-    errorSource = [
+    error = [
       {
         path: '',
         message: err?.message,
@@ -67,7 +67,7 @@ const globalErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
     success: false,
     message,
     statusCode,
-    errorSource,
+    error,
     stack: config.NODE_ENV === 'development' ? err?.stack : null,
   });
 };

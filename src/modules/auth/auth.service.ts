@@ -11,7 +11,7 @@ const loginUser = async (payload: TLoginUser) => {
 
   const isUserExist = await User.findOne({ email });
   if (!isUserExist) {
-    throw new AppError(StatusCodes.NOT_FOUND, 'this user does not exist');
+    throw new AppError(StatusCodes.UNAUTHORIZED, 'Invalid credentials');
   }
 
   const isPasswordMatched = await bcrypt.compare(
@@ -19,7 +19,7 @@ const loginUser = async (payload: TLoginUser) => {
     isUserExist.password,
   );
   if (!isPasswordMatched) {
-    throw new AppError(StatusCodes.FORBIDDEN, 'password doesn`t match');
+    throw new AppError(StatusCodes.UNAUTHORIZED, 'Invalid credentials');
   }
 
   const isBlocked = isUserExist?.isBlocked;
@@ -31,11 +31,10 @@ const loginUser = async (payload: TLoginUser) => {
     userEmail: isUserExist.email,
     role: isUserExist.role,
   };
-  const accessToken = jwt.sign(jwtPayload, config.jwt_access_secret as string, {
+  const token = jwt.sign(jwtPayload, config.jwt_access_secret as string, {
     expiresIn: '10d',
   });
 
-  const token = `Bearer ${accessToken}`;
   return { token };
 };
 

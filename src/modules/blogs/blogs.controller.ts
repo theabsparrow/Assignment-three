@@ -12,7 +12,7 @@ const createBlog = catchAsync(async (req, res, next) => {
   const { userEmail } = req.user;
   const result = await blogService.createBlog(payload, userEmail);
   sendResponse(res, {
-    statusCode: StatusCodes.OK,
+    statusCode: StatusCodes.CREATED,
     success: true,
     message: 'Blog created successfully',
     data: result,
